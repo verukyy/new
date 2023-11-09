@@ -1,112 +1,89 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <title>verukyy.online</title>
     <style>
         body {
-            background-color: #000;
-            color: #ff00005b;
+            background-color: #333;
+            color: #fff;
             font-family: Arial, sans-serif;
+        }
+         .card {
+            background-color: #f00;
+            border: none;
+            color: white;
+            padding: 15px 32px;
             text-align: center;
-            padding: 20px;
-        }
-        h1 {
-            font-size: 48px;
-        }
-        #countdown {
-            font-size: 36px;
-        }
-        .dots-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .dot {
-            width: 10px;
-            height: 10px;
-            background-color: #242424;
-            border-radius: 50%;
-            margin: 0 5px;
-            animation: bounce 1s infinite;
-        }
-
-        @keyframes bounce {
-            0%, 100% {
-                transform: translateY(0);
-            }
-            50% {
-                transform: translateY(-10px);
-            }
-        }
-        .social-buttons {
-            margin-top: 20px;
-        }
-        .social-buttons a {
+            text-decoration: none;
             display: inline-block;
-            margin: 0 10px;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 12px;
         }
-        #good-gif {
-            display: none;
+        .close {
+            float: right;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .wersje {
+            width: 150px;
+            height: 150px;
+            background-color: orange;
+            border-radius: 12px;
+            display: inline-block;
+            margin: 10px;
+        }
+        .button {
+            background-color: #00008B;
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 12px;
         }
     </style>
 </head>
 <body>
- 
-    <div id="countdown"></div>
-    <div id="good-gif">
-        <img src="good./jpg" alt="Good" width="200" height="200">
-    </div>
-    <!-- Dół -->
-    <div id="cookie-banner" style="position: fixed; bottom: 0; left: 0; right: 0; background: #333; color: #fff; padding: 10px; text-align: center;">
-        Ta strona używa plików cookie (ciasteczek) w celu zapewnienia lepszej jakości usług. Korzystając z tej strony, zgadzasz się na ich użycie. <a href="/polityka-prywatnosci">Dowiedz się więcej</a> | <button onclick="closeCookieBanner()">Zamknij</button>
-    </div>
-    <!--<p>Moje sociale</p>
-    <div class="social-buttons">
-        <a href="https://www.x.com/verukyy" target="_blank">
-            <img src="x.png" alt="Twitter" width="44" height="44">
-        </a>
-        <a href="https://www.instagram.com/verukyydev" target="_blank">
-            <img src="ig.png" alt="Instagram" width="44" height="44">
-        </a>
-        <a href="https://www.github.com/verukyy" target="_blank">
-            <img src="github.png" alt="GitHub" width="44" height="44">
-        </a>
-    </div>-->
+<center>
+<h1>VerukyyPc</h1><h3>Aplikacja do naprawy i czyszczenia komputera z Windowsem.</h3>
 
+<button class="button" onclick="showNews()">Nowości</button>
+<button class="button" onclick="showDownload()">Pobierz</button>
+<div id="newsCard" class="card" style="display: none;">
+    <span class="close" onclick="closeNews()">×</span>
+    Nowości
+    <p>Tu pojawią się nowości:)</p>
+</div>
+<div id="downloadCard" class="card" style="display: none;">
+    <span class="close" onclick="closeDownload()">×</span>
+    Pobierz apliacje
+    <p>Tu pojawią się pliki do pobrania:)</p>
+<div class="wersje">Dla testerów 0.3 *Nie zawsze jest stabilna:( <button class="button" onclick="">Pobierz</button></div>
+<div class="wersje">Nawjnowsza 0.2 *Też jest stabilna:) <button class="button" onclick="">Pobierz</button></div>
+<div class="wersje">Stabilna  0.1 <button class="button" onclick="">Pobierz</button></div>
+</div>
+<center>
+<!--Wersja strony 0.10-->
+<script>
+function showNews() {
+    document.getElementById("newsCard").style.display = "block";
+}
+function closeNews() {
+    document.getElementById("newsCard").style.display = "none";
+}
+function showDownload() {
+    document.getElementById("downloadCard").style.display = "block";
+}
+function closeDownload() {
+    document.getElementById("downloadCard").style.display = "none";
+}
+</script>
 
-    
-    <script>
-    function closeCookieBanner() {
-        document.getElementById("cookie-banner").style.display = "none";
-    }
-
-    function showGoodGif() {
-        document.getElementById("good-gif").style.display = "block";
-    }
-    </script>
-
-    <script>
-        var targetDate = new Date("2024-01-01T00:00:00Z").getTime();
-     
-        var x = setInterval(function() {
-            var currentDate = new Date().getTime();
-            var timeLeft = targetDate - currentDate;
-
-            var days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
-            var hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            var minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-            var seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
-
-            var countdown = days + "d " + hours + "h " + minutes + "m " + seconds + "s";
-            document.getElementById("countdown").innerHTML = countdown;
-
-            if (timeLeft < 0) {
-                clearInterval(x);
-                document.getElementById("countdown").innerHTML = "Nowy rok, mam nadzieję że będzie lepszy :)!";
-                showGoodGif(); // Wyświetl "good.gif" po zakończeniu odliczania
-            }
-        }, 1000);
-    </script>
 </body>
 </html>
