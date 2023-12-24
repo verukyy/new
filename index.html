@@ -1,500 +1,235 @@
 <!DOCTYPE html>
 <html lang="pl">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Veruky.online</title>
-  <style>
-    body {
-      background: linear-gradient(45deg, #1a1a1a, rgba(26, 26, 26, 0.288), rgba(26, 26, 26, 0.26));
-      background-size: 200% 200%;
-      animation: gradientAnimation 10s ease infinite;
-      color: #fff;
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      scroll-behavior: smooth;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChatBot</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+            transition: background-color 0.5s;
+            background-color: #1a1a1a; /* Ciemne tło */
+            color: #ffffff;
+        }
 
-    .navbar {
-      background-color: rgba(0, 0, 0, 0.8);
-      padding: 10px;
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 999;
-      display: flex;
-    }
+        #chat-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            box-sizing: border-box;
+        }
 
-    .navbar a {
-      color: #fff;
-      text-decoration: none;
-      margin-right: 10px;
-    }
+        #input-container {
+            display: flex;
+            padding: 20px;
+            box-sizing: border-box;
+        }
 
-    .navbar span {
-      margin-right: 10px;
-    }
+        #user-input {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 20px;
+            margin-right: 10px;
+            background-color: #2c2c2c; /* Ciemne tło dla inputa */
+            color: #ffffff;
+        }
 
-    /* Dodajemy klasę, która będzie ukrywać sekcje */
-    .hidden {
-      display: none;
-    }
+        #send-button {
+            padding: 10px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: #ffffff;
+        }
+       #toggleHolidayMode{
+        padding: 9px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            background-color: #ff000057;
+            color: #ffffff;
+            margin-right: 10px;
 
-    /* Dodajemy klasę, która będzie pokazywać aktywną sekcję */
-    .active-section {
-      display: block;
-    }
+       }
+    
+        #clear-button {
+            padding: 9px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            background-color: #ff000057;
+            color: #ffffff;
+            margin-right: 10px;
+        }
 
-    /* Nowy CSS dla animowanych kropek */
-    .dot {
-      position: absolute;
-      width: 6px;
-      height: 6px;
-      background-color: rgba(255, 255, 255, 0.6);
-      border-radius: 50%;
-      transform-origin: center;
-      animation: pulse 1.5s infinite;
-    }
+        .avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
 
-    @keyframes pulse {
-      0% {
-        transform: scale(1);
-      }
-      50% {
-        transform: scale(1.5);
-        opacity: 0.6;
-      }
-      100% {
-        transform: scale(1);
-        opacity: 1;
-      }
-    }
+        .vbot-avatar {
+            background-color: #4CAF50;
+        }
 
-    button {
-      position: relative;
-      padding: 10px 20px;
-      border-radius: 7px;
-      border: 1px solid rgb(255, 61, 61);
-      font-size: 14px;
-      text-transform: uppercase;
-      font-weight: 600;
-      letter-spacing: 2px;
-      background: transparent;
-      color: #fff;
-      overflow: hidden;
-      -webkit-box-shadow: 0 0 0 0 transparent;
-      box-shadow: 0 0 0 0 transparent;
-      -webkit-transition: all 0.2s ease-in;
-      transition: all 0.2s ease-in;
-    }
+        .user-avatar {
+            background-color: #008CBA;
+        }
 
-    button:hover {
-      background: rgb(255, 61, 61);
-      -webkit-box-shadow: 0 0 30px 5px rgba(236, 0, 0, 0.815);
-      box-shadow: 0 0 30px 5px rgba(236, 0, 0, 0.815);
-      -webkit-transition: all 0.2s ease-out;
-      transition: all 0.2s ease-out;
-    }
+        .holiday-mode {
+            background-image: url('snow.png'); /* Tło ze śniegiem */
+            background-size: cover;
+        }
 
-    button:hover::before {
-      -webkit-animation: sh02 0.5s 0s linear;
-      animation: sh02 0.5s 0s linear;
-    }
+        .snowflake {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 20px;
+            height: 20px;
+            background-image: url('snow.png'); /* Zdjęcie śniegu */
+            background-size: cover;
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+            animation: falling 5s linear infinite;
+        }
 
-    button::before {
-      content: '';
-      display: block;
-      width: 0px;
-      height: 86%;
-      position: absolute;
-      top: 7%;
-      left: 0%;
-      opacity: 0;
-      background: #fff;
-      -webkit-box-shadow: 0 0 50px 30px #fff;
-      box-shadow: 0 0 50px 30px #fff;
-      -webkit-transform: skewX(-20deg);
-      -ms-transform: skewX(-20deg);
-      transform: skewX(-20deg);
-    }
-
-    @-webkit-keyframes sh02 {
-      from {
-        opacity: 0;
-        left: 0%;
-      }
-      50% {
-        opacity: 1;
-      }
-      to {
-        opacity: 0;
-        left: 100%;
-      }
-    }
-
-    @keyframes sh02 {
-      from {
-        opacity: 0;
-        left: 0%;
-      }
-      50% {
-        opacity: 1;
-      }
-      to {
-        opacity: 0;
-        left: 100%;
-      }
-    }
-
-    button:active {
-      -webkit-box-shadow: 0 0 0 0 transparent;
-      box-shadow: 0 0 0 0 transparent;
-      -webkit-transition: box-shadow 0.2s ease-in;
-      -webkit-transition: -webkit-box-shadow 0.2s ease-in;
-      transition: -webkit-box-shadow 0.2s ease-in;
-      transition: box-shadow 0.2s ease-in;
-      transition: box-shadow 0.2s ease-in, -webkit-box-shadow 0.2s ease-in;
-    }
-
-    .section {
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background-color 0.9s;
-      position: relative;
-      overflow: hidden;
-      background: linear-gradient(45deg, #640101, rgb(73, 68, 2), rgb(0, 10, 70));
-      background-size: 200% 200%;
-      animation: gradientAnimation 10s ease infinite;
-    }
-
-    /* Nowy CSS dla animowanego tła dla sekcji */
-    @keyframes gradientAnimation {
-      0% {
-        background-position: 0% 50%;
-      }
-      50% {
-        background-position: 100% 50%;
-      }
-      100% {
-        background-position: 0% 50%;
-      }
-    }
-
-    /* Nowy CSS dla efektu przewijania w menu nawigacji */
-    .active-link {
-      border-bottom: 2px solid #ffffff0c;
-    }
-
-    /* Nowy CSS dla rozwijanego menu */
-    .dropdown {
-      position: relative;
-      display: inline-block;
-    }
-
-    .dropbtn {
-      background-color: #000000;
-      color: white;
-      padding: 10px;
-      font-size: 16px;
-      border: none;
-      cursor: pointer;
-    }
-
-    .dropdown-content {
-      display: none;
-      position: absolute;
-      background-color: #f9f9f9;
-      min-width: 160px;
-      box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-      z-index: 1;
-    }
-
-    .dropdown-content a {
-      color: black;
-      padding: 12px 16px;
-      text-decoration: none;
-      display: block;
-    }
-
-    .dropdown-content a:hover {
-      background-color: #f1f1f1;
-    }
-
-    .dropdown:hover .dropdown-content {
-      display: block;
-    }
-
-    .text-animation {
-  font-size: 24px;
-  white-space: nowrap;
-  overflow: hidden;
-  border-right: 2px solid #333; /* Kursor będący efektem pisania */
-  animation: typing 5s steps(40) infinite, blink-caret 1s infinite;
-}
-
-/* Animacja pisania */
-@keyframes typing {
-  from {
-    width: 0;
-  }
-  to {
-    width: 100%;
-  }
-}
-
-/* Animacja migania kursora */
-@keyframes blink-caret {
-  from, to {
-    border-color: transparent;
-  }
-  50% {
-    border-color: #333;
-  }
-}
-    /* Nowe style dla komunikatu */
-    .overlay {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.7); /* Ciemne tło z przezroczystością */
-      justify-content: center;
-      align-items: center;
-    }
-
-    .popup {
-      background: #6d00008c;
-      padding: 20px;
-      border-radius: 5px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-      text-align: center;
-    }
-
-    /* Styl dla pola wyszukiwania */
-#searchInput {
-  padding: 10px;
-  border: none;
-  border-radius: 20px; /* Zaokrąglone rogi */
-  background-color: #333; /* Ciemne tło */
-  color: #fff;
-  width: 200px;
-}
-
-/* Styl dla przycisku "Szukaj" */
-#searchInput + button {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 20px; /* Zaokrąglone rogi */
-  background-color: #333; /* Ciemne tło */
-  color: #fff;
-  cursor: pointer;
-  margin-left: 10px;
-}
-
-/* Styl dla wyników wyszukiwania */
-#searchResults {
-  margin-top: 20px;
-  padding: 10px;
-  border-radius: 10px; /* Zaokrąglone rogi */
-  background-color: #333; /* Ciemne tło */
-  color: #fff;
-  max-width: 400px;
-  width: 100%;
-}
-
-  </style>
+        @keyframes falling {
+            to {
+                transform: translateY(100vh);
+            }
+        }
+    </style>
 </head>
-
 <body>
-  <nav class="navbar">
-    <span>Veruky.online&nbsp; &nbsp;/ &nbsp;</span>
-    <center>
-      <a href="#Home">`Home`</a>
-      <!-- Nowa sekcja Projekty z rozwijanym menu -->
-      <div class="dropdown">
-        <button class="dropbtn">Projekty &#9660;</button>
-        <div class="dropdown-content">
-          <a href="#">Wkróce</a>
-          <a href="#">Wkróce</a>
-        </div>
-
-          </div>
-          <div class="dropdown">
-            <button class="dropbtn">Do pobrania &#9660;</button>
-            <div class="dropdown-content">
-              <a href="#">Wkróce</a>
-              <a href="#">Wkróce</a>
-            </div>
-          </div>
-          <div class="dropdown">
-            <button class="dropbtn">Dodatki html &#9660;</button>
-            <div class="dropdown-content">
-              <a href="#">Wkróce</a>
-              <a href="#">Wkróce</a>
-        </div>
-      </div>
-        <div class="dropdown">
-          <button class="dropbtn">Konto &#9660;</button>
-          <div class="dropdown-content">
-            <a href="#">Zaloguj sie</a>
-            <a href="#">Załóż konto</a>
-            
-      
-          </div>
-      </div>      <input type="text" id="searchInput" placeholder="Wyszukaj hasło...">
-            <button onclick="searchPasswords()">Szukaj</button>
-            <center><div id="searchResults">Wyniki wyszukiwania: </div></center>
-      <!-- Koniec sekcji Projekty -->
-    </center>
-  </nav>
-  <center>
-    <section id="Home" class="section">
-      <div>
-        
-        <div class="text-animation" id="textAnimation"></div>
-<h2>Możesz pobrać projekty lub gotowe aplikacje do testowania:)</h2>
-        <p>za darmo</p>
-        <button id="openPopup">Zobacz ChatBot'a lub zaloguj się</button>
-        <!--<input type="text" id="searchInput" placeholder="Wyszukaj hasło...">
-        <button onclick="searchPasswords()">Szukaj</button>
-        <div id="searchResults"></div>-->
-        <script src="hasla.js"></script>
-      </div>
-    </section>
-      <!-- Komunikat -->
-  <div class="overlay" id="overlay">
-    <div class="popup">
-      <h2>Funkcje niedostępne</h2>
-      <p>Niestety, ta funkcja jest obecnie niedostępna.</p>
-      <P></P>
-      <button onclick="closePopup()">Zamknij</button>
+    <button>Wersja 0.1</button>
+    <div id="chat-container"></div>
+    <div id="input-container">
+        <img src="user.png" alt="User Avatar" class="avatar user-avatar">
+        <input type="text" id="user-input" placeholder="Wpisz swoje pytanie...">
+        <button id="send-button" onclick="sendMessage()">Wyślij</button>
+        <button id="clear-button" onclick="clearChat()">Clear chat</button>
     </div>
-  </div>
-    <!--<h1>Strona nie może się załadować:(</h1>-->
+
     <script>
-    // JavaScript do obsługi komunikatu
-    document.getElementById("openPopup").addEventListener("click", function () {
-      document.getElementById("overlay").style.display = "flex";
-    });
+        const chatContainer = document.getElementById('chat-container');
+        const userInput = document.getElementById('user-input');
 
-    function closePopup() {
-      document.getElementById("overlay").style.display = "none";
-    }
-//www
+        function sendMessage() {
+            const userMessage = userInput.value;
+            displayMessage(userMessage, true);
+            userInput.value = '';
 
-const text = "Witaj na mojej prostej stronie www";
-let charIndex = 0;
-const textAnimation = document.getElementById("textAnimation");
+            // Tutaj umieść kod do wysłania userMessage do OpenAI GPT-3 i uzyskania odpowiedzi
 
-function typeWriter() {
-  if (charIndex < text.length) {
-    textAnimation.textContent += text.charAt(charIndex);
-    charIndex++;
-    setTimeout(typeWriter, 100);
-  }
-}
+            // Tutaj symulujemy odpowiedź od chatbota
+            const botMessage = zapytaj(userMessage);
+            displayMessage(botMessage, false);
+        }
 
-typeWriter();
+        function dzisiejsza_data() {
+            let dzisiaj = new Date();
+            let dd = String(dzisiaj.getDate()).padStart(2, '0');
+            let mm = String(dzisiaj.getMonth() + 1).padStart(2, '0');
+            let yyyy = dzisiaj.getFullYear();
+            return dd + '.' + mm + '.' + yyyy;
+        }
+
+        function witaj() {
+            return "Cześć, jestem VerukyyChat i lubię pomagać.";
+        }
+
+        function strona_html() {
+            return "wygenerowana strona jest na google docs oto link: https://docs.google.com/document/d/1LSqS85MoZLNlMrC9hrSptNdmiSp3YGTbxU1EAYCvWZw/edit?usp=sharing";
+        }
+
+        function zapytaj(pytanie) {
+            if (pytanie.includes("data")) {
+                return dzisiejsza_data();
+            } else if (pytanie.includes("witaj")) {
+                return witaj();
+            } else if (pytanie.includes("strona")) {
+                return strona_html();
+            } else if (pytanie.includes("co tam")) {
+                return "Jest git, a u Ciebie?";
+            } else if (pytanie.includes("jaki polecasz system operacyjny")) {
+                return "Oto 3 systemy, które polecam: 1. Linux - system z otwartym kodem źródłowym, 2. MacOS - system dla komputerów i laptopów Apple z zamkniętym kodem źródłowym, 3. Windows - system dla firm komputerów Dell, Acer, Lenovo itp. z zamkniętym kodem źródłowym.";
+            } else if (pytanie.includes("kto cię programował")) {
+                return "Moi twórcy:)";
+            } else if (pytanie.trim() === "") {
+                return "Proszę wpisać pytanie";
+            } else {
+                return "Przepraszam, ale nie rozumiem";
+            }
+        }
+
+        function displayMessage(message, isUser) {
+            const messageContainer = document.createElement('div');
+            messageContainer.style.marginBottom = '10px';
+            messageContainer.style.textAlign = isUser ? 'right' : 'left';
+
+            const avatarClass = isUser ? 'user-avatar' : 'vbot-avatar';
+            messageContainer.innerHTML = `
+                <img src="${isUser ? 'user.png' : 'vbot.png'}" alt="${isUser ? 'User' : 'VBot'} Avatar" class="avatar ${avatarClass}">
+                <div style="border-radius: ${isUser ? '20px 0 20px 20px' : '0 20px 20px 20px'}; background-color: ${isUser ? '#008CBA' : '#4CAF50'}; padding: 10px; display: inline-block; max-width: 70%;">${message}</div>
+            `;
+            chatContainer.appendChild(messageContainer);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        function clearChat() {
+            const chatMessages = document.getElementById('chat-container');
+            chatMessages.innerHTML = '';
+        }
+
+        function toggleHolidayMode() {
+            document.body.classList.toggle('holiday-mode');
+            createSnowflakes();
+        }
+
+        function createSnowflakes() {
+            if (document.body.classList.contains('holiday-mode')) {
+                for (let i = 0; i < 20; i++) {
+                    const snowflake = document.createElement('div');
+                    snowflake.classList.add('snowflake');
+                    snowflake.style.left = `${Math.random() * 100}vw`;
+                    document.body.appendChild(snowflake);
+                }
+            } else {
+                const snowflakes = document.querySelectorAll('.snowflake');
+                snowflakes.forEach((snowflake) => snowflake.remove());
+            }
+        }
+    </script>
+        <script>
+            // ... (bez zmian w sekcji JavaScript) ...
+    
+            function showDevUserPrompt() {
+                const password = prompt("Wprowadź hasło Dev-user:");
+                if (password === "kochamvice") {
+                    const newNickname = prompt("Wprowadź nowy nick:");
+                    if (newNickname) {
+                        document.getElementById('user-input').value = newNickname;
+                        displayMessage(`Nick zmieniony na: ${newNickname}`, true);
+                    }
+                } else {
+                    alert("Nieprawidłowe hasło Dev-user.");
+                }
+            }
+        </script>
+     <button onclick="showDevUserPrompt()">Dev-user</button>
+   <!--<button onclick="toggleHolidayMode()">Włącz/Wyłącz Motyw Świąteczny</button>-->
 
 
 
 
-document.addEventListener("DOMContentLoaded", function () {
-  // Pobierz wszystkie sekcje
-  const sections = document.querySelectorAll('.section');
-
-  // Dodaj klasę „hidden” do wszystkich sekcji
-  sections.forEach(section => {
-    section.classList.add('hidden');
-  });
-
-  // Usuń klasę „hidden” z aktywnej sekcji (Home)
-  const homeSection = document.querySelector('#Home');
-  homeSection.classList.remove('hidden');
-
-  // Pobieramy wszystkie odnośniki nawigacji
-  const navLinks = document.querySelectorAll('.navbar a');
-
-  // Dla każdego odnośnika nawigacji dodajemy obsługę zdarzenia kliknięcia
-  navLinks.forEach(link => {
-    link.addEventListener('click', e => {
-      e.preventDefault(); // Zatrzymujemy domyślne zachowanie odnośnika
-
-      // Pobieramy wartość atrybutu href odnośnika
-      const targetId = link.getAttribute('href');
-
-      // Ukrywamy wszystkie sekcje
-      sections.forEach(section => {
-        section.classList.add('hidden');
-      });
-
-      // Pobieramy element docelowy na podstawie wartości href
-      const targetElement = document.querySelector(targetId);
-
-      // Pokazujemy wybraną sekcję
-      targetElement.classList.remove('hidden');
-
-      // Przewijamy stronę do elementu docelowego z animacją
-      targetElement.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start'
-      });
-
-      // Aktualizujemy tytuł strony na podstawie aktualnej sekcji
-      const sectionTitle = targetElement.querySelector('h1').innerText;
-      document.title = `Veruky.online - ${sectionTitle}`;
-
-      // Aktualizujemy menu nawigacji na podstawie aktualnej sekcji
-      navLinks.forEach(navLink => navLink.classList.remove('active-link'));
-      link.classList.add('active-link');
-    });
-  });
-
-  // Dodajemy animowane kropki do sekcji
-  sections.forEach(section => {
-    for (let i = 0; i < 50; i++) {
-      const dot = document.createElement('div');
-      dot.classList.add('dot');
-      section.appendChild(dot);
-      dot.style.left = `${Math.random() * 100}%`; // Losowa pozycja kropki
-      dot.style.top = `${Math.random() * 100}%`; // Losowa pozycja kropki
-    }
-  });
-
-  // Dodajemy animowane tło i kolory do wszystkich sekcji
-  const sectionStyles = document.createElement('style');
-  sectionStyles.innerHTML = `
-    @keyframes gradientAnimation {
-      0% {
-        background-position: 0% 50%;
-      }
-      50% {
-        background-position: 100% 50%;
-      }
-      100% {
-        background-position: 0% 50%;
-      }
-    }
-  `;
-
-  document.head.appendChild(sectionStyles);
-
-  // Dodajemy klasę „active-section” do pierwszej sekcji
-  const firstSection = document.querySelector('.section');
-  firstSection.classList.add('active-section');
-
-  // Aktualizujemy tytuł strony na podstawie pierwszej sekcji
-  const firstSectionTitle = firstSection.querySelector('h1').innerText;
-  document.title = `Veruky.online - ${firstSectionTitle}`;
-});
-</script>
-</center>
 </body>
 </html>
