@@ -17,6 +17,12 @@
             background-color: #1a1a1a; /* Ciemne tło */
             color: #ffffff;
         }
+.welcome-message {
+    text-align: center;
+    font-size: 18px;
+    margin: 10px 0;
+    color: #ffffff;
+}
 
         #chat-container {
             flex: 1;
@@ -228,6 +234,13 @@
                     alert("Nieprawidłowe hasło Dev-user.");
                 }
             }
+            document.addEventListener('DOMContentLoaded', function() {
+    // Dodaj komunikat powitalny po załadowaniu strony
+    const welcomeMessage = "Witaj w Vchat lub Vbot, nowa wersja 0.2:)";
+    displayMessage(welcomeMessage, false);
+
+    // ... (reszta kodu JavaScript) ...
+});
         </script>
      <button onclick="showDevUserPrompt()">Dev-user</button>
    <button onclick="toggleHolidayMode()">Włącz/Wyłącz Motyw Świąteczny</button>
