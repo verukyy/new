@@ -1,15 +1,16 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Simu-Star</title>
+<title>Shakes and Fidget</title>
 <style>
     /* CSS styles */
     body {
         font-family: Arial, sans-serif;
-        text-align: center;
+        background-color: #f0f0f0;
+        margin: 0;
+        padding: 0;
     }
     #loading {
         display: none;
@@ -18,7 +19,31 @@
     }
     #menu {
         display: none;
-        margin-top: 50px;
+        margin-top: 20px;
+    }
+    #menu ul {
+        list-style-type: none;
+        padding: 0;
+    }
+    #menu ul li {
+        display: inline;
+        margin-right: 10px;
+    }
+    #menu ul li a {
+        text-decoration: none;
+        color: #333;
+        padding: 10px 20px;
+        background-color: #ddd;
+        border-radius: 5px;
+    }
+    #menu ul li a:hover {
+        background-color: #aaa;
+    }
+    @media screen and (max-width: 600px) {
+        #menu ul li {
+            display: block;
+            margin-bottom: 10px;
+        }
     }
 </style>
 </head>
@@ -26,15 +51,14 @@
 
 <div id="loading">Connecting to server...</div>
 <div id="menu">
-    <h1>Welcome to Shakes and Fidget</h1>
-    <ol>
+    <ul>
         <li><a href="#">Karczma</a></li>
         <li><a href="#">Walka</a></li>
         <li><a href="#">Zbrojownia</a></li>
         <li><a href="#">Ustawienia</a></li>
         <li><a href="#">Konto</a></li>
         <li><a href="#">Wyloguj</a></li>
-    </ol>
+    </ul>
 </div>
 
 <script>
